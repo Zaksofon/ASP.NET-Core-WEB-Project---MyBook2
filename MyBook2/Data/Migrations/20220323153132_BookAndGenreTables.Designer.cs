@@ -10,7 +10,7 @@ using MyBook2.Data;
 namespace MyBook2.Data.Migrations
 {
     [DbContext(typeof(MyBook2DbContext))]
-    [Migration("20220323151347_BookAndGenreTables")]
+    [Migration("20220323153132_BookAndGenreTables")]
     partial class BookAndGenreTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -333,7 +333,7 @@ namespace MyBook2.Data.Migrations
                     b.HasOne("MyBook2.Data.Models.Genre", "Genre")
                         .WithMany("Books")
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Genre");

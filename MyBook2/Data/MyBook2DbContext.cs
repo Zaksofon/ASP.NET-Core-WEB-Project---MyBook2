@@ -16,5 +16,15 @@ namespace MyBook2.Data
 
         public DbSet<Book> Books { get; init; }
         public DbSet<Genre> Genres { get; init; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Book>()
+                .HasOne(g => g.Genre)
+                .WithMany(b => b.Books)
+                .HasForeignKey(b => b.GenreId)
+                .OnDelete(DeleteBehavior.Restrict);
+            base.OnModelCreating(builder);
+        }
     }
 }

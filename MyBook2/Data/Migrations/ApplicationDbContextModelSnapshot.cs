@@ -331,7 +331,7 @@ namespace MyBook2.Data.Migrations
                     b.HasOne("MyBook2.Data.Models.Genre", "Genre")
                         .WithMany("Books")
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Genre");

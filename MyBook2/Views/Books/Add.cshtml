@@ -1,0 +1,54 @@
+﻿@using MyBook2.Data.Models
+@model AddBookFormModel
+
+@{
+	ViewData["Title"] = "Add Book";
+}
+
+<div clas="container">
+	<div class="row">
+		<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+			<h2 heading-margin>
+				Add Book
+			</h2>
+			<form method="post">
+				<div class="form-group">
+					<label asp-for="Title"></label>
+					<input asp-for="Title" class="form-control" placeholder="Lord of The Rings, Harry Potter, etc...">
+					<span asp-validation-for="Title" class="small text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Author"></label>
+					<input asp-for="Author" class="form-control" placeholder="J. R. R. Tolkien, J. K. Rowling, etc...">
+					<span asp-validation-for="Author" class="small text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Description"></label>
+					<textarea asp-for="Description" rows="3" class="form-control" placeholder="Amazing adventure that..."></textarea>
+					<span asp-validation-for="Description" class="small text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="ImageUrl"></label>
+					<input asp-for="ImageUrl" class="form-control">
+					<span asp-validation-for="ImageUrl" class="small text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="IssueYear"></label>
+					<input asp-for="IssueYear" class="form-control" placeholder="@DateTime.UtcNow.Year">
+					<span asp-validation-for="IssueYear" class="small text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="GenreId">Example select</label>
+					<select asp-for="GenreId" class="form-control">
+						@foreach (var genre in Model.Genres)
+						{
+							<option value="@genre.Id">@genre.Name</option>
+						}
+					</select>
+				</div>
+
+				<input class="btn btn-outline-primary btn-block" type="submit" value="Save"/>
+			</form>
+		</div>
+	</div>
+</div>
