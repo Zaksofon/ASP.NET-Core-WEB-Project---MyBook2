@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MyBook2.Data;
 using MyBook2.Data.Models;
 using MyBook2.Models.Book;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MyBook2.Controllers
 {
@@ -14,6 +14,61 @@ namespace MyBook2.Controllers
 
         public BooksController(MyBook2DbContext data) => this.data = data;
 
+        //AllBooksQueryModel instead of (string author, string searchTerm, AllBooksSorting sorting) in the Method below!
+        public IActionResult All([FromQuery]AllBooksQueryModel query)
+        {
+            var booksQuery = data.Books.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.Author))
+            {
+                booksQuery = booksQuery
+                    .Where(b => b.Author == query.Author);
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                booksQuery = booksQuery
+                    .Where(b => (b.Title + " " + b.Author).ToLower().Contains(query.SearchTerm.ToLower())
+                                || b.Description.ToLower().Contains(query.SearchTerm.ToLower()));
+            }
+
+            //booksQuery = query.Sorting switch
+            //{
+            //    AllBooksSorting.MostRecentlyAdded => booksQuery.OrderByDescending(b => b.Id),
+            //    AllBooksSorting.IssueDate => booksQuery.OrderByDescending(b => b.IssueYear),
+            //    AllBooksSorting.TitleAndAuthor => booksQuery.OrderByDescending(b => b.Title).ThenBy(b => b.Author),
+            //    _ => booksQuery.OrderByDescending(b => b.Id)
+            //};
+
+            var totalBooks = booksQuery.Count();
+
+            var books = booksQuery
+                .Skip((query.CurrentPage - 1) * AllBooksQueryModel.BooksPerPage)
+                .Take(AllBooksQueryModel.BooksPerPage)
+                .Select(b => new BookListingViewModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = b.Author,
+                    IssueYear = b.IssueYear,
+                    ImageUrl = b.ImageUrl,
+                    Genre = b.Genre.Name
+                })
+                .ToList();
+
+            var bookAuthors = data
+                .Books
+                .Select(b => b.Author)
+                .Distinct()
+                .OrderBy(au => au)
+                .ToList();
+
+            query.TotalBooks = totalBooks;
+            query.Authors = bookAuthors;
+            query.Books = books;
+
+            return View(query);
+        }
         public IActionResult Add() => View(new AddBookFormModel
         {
             Genres = GetBookGenre()
@@ -48,7 +103,7 @@ namespace MyBook2.Controllers
 
             data.SaveChanges(); 
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(All));
         }
 
         private IEnumerable<BookGenreViewModel> GetBookGenre() => data

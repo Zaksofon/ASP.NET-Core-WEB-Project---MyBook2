@@ -17,12 +17,12 @@ namespace MyBook2.Infrastructure
 
             data.Database.Migrate();
 
-            SeedCategories(data);
+            SeedGenres(data);
 
             return app;
         }
 
-        private static void SeedCategories(MyBook2DbContext data)
+        private static void SeedGenres(MyBook2DbContext data)
         {
             if (data.Genres.Any())
             {
