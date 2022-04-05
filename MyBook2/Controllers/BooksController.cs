@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBook2.Data;
 using MyBook2.Data.Models;
+using MyBook2.Infrastructure;
 using MyBook2.Models.Book;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,14 +70,36 @@ namespace MyBook2.Controllers
 
             return View(query);
         }
-        public IActionResult Add() => View(new AddBookFormModel
+
+        [Authorize]
+        public IActionResult Add()
         {
-            Genres = GetBookGenre()
-        });
+            if (!UserIsLibrarian())
+            {
+                return RedirectToAction(nameof(LibrariansController.Become), "Librarians");
+            }
+
+            return View(new AddBookFormModel
+            {
+                Genres = GetBookGenre()
+            });
+        }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddBookFormModel book)
         {
+            var librarianId = data
+                .Librarians
+                .Where(l => l.UserId == User.GetId())
+                .Select(l => l.Id)
+                .FirstOrDefault();
+
+            if (librarianId == 0)
+            {
+                return RedirectToAction(nameof(LibrariansController.Become), "Librarians");
+            }
+
             if (!data.Genres.Any(g => g.Id == book.GenreId))
             {
                 ModelState.AddModelError(nameof(book.GenreId), "Genre does not exist.");
@@ -97,6 +120,7 @@ namespace MyBook2.Controllers
                 ImageUrl = book.ImageUrl,
                 GenreId = book.GenreId,
                 IssueYear = book.IssueYear,
+                LibrarianId = librarianId
             };
 
             data.Books.Add(bookLibrary);
@@ -114,5 +138,14 @@ namespace MyBook2.Controllers
                     Name = g.Name
                 })
                 .ToList();
+
+        private bool UserIsLibrarian()
+        {
+            var userId = User.GetId();
+
+            return this.data
+                .Librarians
+                .Any(l => l.UserId == userId);
+        }
     }
 }
