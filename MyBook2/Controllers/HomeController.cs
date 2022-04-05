@@ -1,15 +1,13 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MyBook2.Data;
 using MyBook2.Models;
-using MyBook2.Models.Book;
 using MyBook2.Models.Home;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace MyBook2.Controllers
 {
-    public class HomeController : Controller
+	public class HomeController : Controller
     {
         private readonly MyBook2DbContext data;
 

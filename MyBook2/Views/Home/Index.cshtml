@@ -16,8 +16,7 @@
 		<h1 class="display-4">Book your book!</h1>
 		<p class="lead">There are no books in the system, would you like to add some?</p>
 		<hr class="my-4">
-		<p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-		<a asp-controller="Books" asp-action="Add" class="btn btn-primary btn-lg" role="button">Learn more</a>
+		<a asp-controller="Books" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add new book</a>
 	</div>
 }
 
@@ -28,7 +27,9 @@
 			<div class="carousel-item active align-items-center">
 				<img class="d-block w-25" src="@firstBook.ImageUrl" alt="@firstBook.Title @firstBook.Author">
 				<div class="carousel-caption d-none d-md-block">
-					<h5><a class="btn btn-primary" asp-controller="Books" asp-action="Details" asp-route-id="@firstBook.Id">"@firstBook.Title" - @firstBook.Author</a></h5>
+					<h5><a class="btn btn-primary" asp-controller="Books" 
+					       asp-action="Details" 
+					       asp-route-id="@firstBook.Id">"@firstBook.Title" - @firstBook.Author</a></h5>
 				</div>
 			</div>
 		}
@@ -37,7 +38,9 @@
 			<div class="carousel-item">
 				<img class="d-block w-25" src="@secondBook.ImageUrl" alt="@secondBook.Title @secondBook.Author">
 				<div class="carousel-caption d-none d-md-block">
-					<h5><a class="btn btn-primary" asp-controller="Books" asp-action="Details" asp-route-id="@secondBook.Id">"@secondBook.Title" - @secondBook.Author</a></h5>
+					<h5><a class="btn btn-primary" asp-controller="Books" 
+					       asp-action="Details" 
+					       asp-route-id="@secondBook.Id">"@secondBook.Title" - @secondBook.Author</a></h5>
 				</div>
 			</div>
 		}
@@ -46,7 +49,9 @@
 			<div class="carousel-item">
 				<img class="d-block w-25" src="@thirdBook.ImageUrl" alt="@thirdBook.Title @thirdBook.Author">
 				<div class="carousel-caption d-none d-md-block">
-					<h5><a class="btn btn-primary" asp-controller="Books" asp-action="Details" asp-route-id="@thirdBook.Id">"@thirdBook.Title" - @thirdBook.Author</a></h5>
+					<h5><a class="btn btn-primary" asp-controller="Books" 
+					       asp-action="Details" 
+					       asp-route-id="@thirdBook.Id">"@thirdBook.Title" - @thirdBook.Author</a></h5>
 				</div>
 			</div>
 		}

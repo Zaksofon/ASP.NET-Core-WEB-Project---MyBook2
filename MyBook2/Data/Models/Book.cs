@@ -26,5 +26,9 @@ namespace MyBook2.Data.Models
         public string ImageUrl { get; set; }
 
         public int IssueYear { get; set; }
+
+        public int LibrarianId { get; init; }
+
+        public Librarian Librarian { get; init; }
     }
 }

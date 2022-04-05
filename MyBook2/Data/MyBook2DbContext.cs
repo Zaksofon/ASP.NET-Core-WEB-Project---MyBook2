@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using MyBook2.Data.Models;
 
 namespace MyBook2.Data
@@ -16,14 +14,31 @@ namespace MyBook2.Data
 
         public DbSet<Book> Books { get; init; }
         public DbSet<Genre> Genres { get; init; }
+        public DbSet<Librarian> Librarians { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Book>()
+            builder
+                .Entity<Book>()
                 .HasOne(g => g.Genre)
                 .WithMany(b => b.Books)
                 .HasForeignKey(b => b.GenreId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Book>()
+                .HasOne(l => l.Librarian)
+                .WithMany(b => b.Books)
+                .HasForeignKey(l => l.LibrarianId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Librarian>()
+                .HasOne<IdentityUser>()
+                .WithOne()
+                .HasForeignKey<Librarian>(l => l.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
         }
     }
