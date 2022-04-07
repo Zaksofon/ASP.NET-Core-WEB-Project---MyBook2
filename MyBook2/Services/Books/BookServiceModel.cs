@@ -1,6 +1,6 @@
-﻿namespace MyBook2.Models.Book
+﻿namespace MyBook2.Services.Books
 {
-    public class BookListingViewModel
+    public class BookServiceModel
     {
         public int Id { get; init; }
 

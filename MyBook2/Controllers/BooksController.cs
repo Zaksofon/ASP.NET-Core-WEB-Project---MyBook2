@@ -6,67 +6,32 @@ using MyBook2.Infrastructure;
 using MyBook2.Models.Book;
 using System.Collections.Generic;
 using System.Linq;
+using MyBook2.Services.Books;
 
 namespace MyBook2.Controllers
 {
     public class BooksController : Controller
     {
+        private readonly IBookService books;
         private readonly MyBook2DbContext data;
 
-        public BooksController(MyBook2DbContext data) => this.data = data;
+        public BooksController(MyBook2DbContext data, IBookService books)
+        {
+            this.data = data;
+            this.books = books;
+        }
 
         //AllBooksQueryModel instead of (string author, string searchTerm, AllBooksSorting sorting) in the Method below!
         public IActionResult All([FromQuery]AllBooksQueryModel query)
         {
-            var booksQuery = data.Books.AsQueryable();
+            var queryResult = this.books
+                .All(query.Author, query.SearchTerm, query.CurrentPage, AllBooksQueryModel.BooksPerPage);
 
-            if (!string.IsNullOrWhiteSpace(query.Author))
-            {
-                booksQuery = booksQuery
-                    .Where(b => b.Author == query.Author);
-            }
+            var bookAuthors = this.books.AllBooksAuthors();
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-            {
-                booksQuery = booksQuery
-                    .Where(b => (b.Title + " " + b.Author).ToLower().Contains(query.SearchTerm.ToLower())
-                                || b.Description.ToLower().Contains(query.SearchTerm.ToLower()));
-            }
-
-            //booksQuery = query.Sorting switch
-            //{
-            //    AllBooksSorting.MostRecentlyAdded => booksQuery.OrderByDescending(b => b.Id),
-            //    AllBooksSorting.IssueDate => booksQuery.OrderByDescending(b => b.IssueYear),
-            //    AllBooksSorting.TitleAndAuthor => booksQuery.OrderByDescending(b => b.Title).ThenBy(b => b.Author),
-            //    _ => booksQuery.OrderByDescending(b => b.Id)
-            //};
-
-            var totalBooks = booksQuery.Count();
-
-            var books = booksQuery
-                .Skip((query.CurrentPage - 1) * AllBooksQueryModel.BooksPerPage)
-                .Take(AllBooksQueryModel.BooksPerPage)
-                .Select(b => new BookListingViewModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    Author = b.Author,
-                    IssueYear = b.IssueYear,
-                    ImageUrl = b.ImageUrl,
-                    Genre = b.Genre.Name
-                })
-                .ToList();
-
-            var bookAuthors = data
-                .Books
-                .Select(b => b.Author)
-                .Distinct()
-                .OrderBy(au => au)
-                .ToList();
-
-            query.TotalBooks = totalBooks;
+            query.TotalBooks = queryResult.TotalBooks;
             query.Authors = bookAuthors;
-            query.Books = books;
+            query.Books = queryResult.Books;
 
             return View(query);
         }

@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyBook2.Data;
 using MyBook2.Infrastructure;
+using MyBook2.Services.Books;
+using MyBook2.Services.Statistics;
 
 namespace MyBook2
 {
@@ -34,7 +36,10 @@ namespace MyBook2
                     options.Password.RequireNonAlphanumeric = false;
                 })
                 .AddEntityFrameworkStores<MyBook2DbContext>();
+
             services.AddControllersWithViews();
+            services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<IBookService, BookService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

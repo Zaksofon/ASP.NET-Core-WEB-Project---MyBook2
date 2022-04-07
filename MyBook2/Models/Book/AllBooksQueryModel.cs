@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MyBook2.Services.Books;
 
 namespace MyBook2.Models.Book
 {
@@ -20,6 +21,6 @@ namespace MyBook2.Models.Book
 
         public IEnumerable<string> Authors { get; set; }
 
-        public IEnumerable<BookListingViewModel> Books { get; set; }
+        public IEnumerable<BookServiceModel> Books { get; set; }
     }
 }

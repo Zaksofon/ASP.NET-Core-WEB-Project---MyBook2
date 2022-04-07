@@ -4,14 +4,20 @@ using MyBook2.Models;
 using MyBook2.Models.Home;
 using System.Diagnostics;
 using System.Linq;
+using MyBook2.Services.Statistics;
 
 namespace MyBook2.Controllers
 {
 	public class HomeController : Controller
     {
+        private readonly IStatisticsService statistics;
         private readonly MyBook2DbContext data;
 
-        public HomeController(MyBook2DbContext data) => this.data = data;
+        public HomeController(IStatisticsService statistics, MyBook2DbContext data)
+        {
+            this.statistics = statistics;
+            this.data = data;
+        }
         public IActionResult Index()
         {
             var totalBooks = this.data.Books.Count();
@@ -30,9 +36,12 @@ namespace MyBook2.Controllers
                 .Take(3)
                 .ToList();
 
+            var totalStatistics = this.statistics.Total();
+
             return View(new IndexViewModel
             {
-                TotalBooks = totalBooks,
+                TotalBooks = totalStatistics.TotalBooks,
+                TotalUsers = totalStatistics.TotalUsers,
                 Books = books,
             });
         }
