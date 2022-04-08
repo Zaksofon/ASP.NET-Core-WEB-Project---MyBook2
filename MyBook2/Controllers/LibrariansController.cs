@@ -21,11 +21,11 @@ namespace MyBook2.Controllers
         [Authorize]
         public IActionResult Become(BecomeLibrarianFormModel librarian)
         {
-            var userId = User.GetId();
+            var userId = User.Id();
 
             var userIsAlreadyLibrarian = data
                 .Librarians
-                .Any(l => l.UserId == this.User.GetId());
+                .Any(l => l.UserId == this.User.Id());
 
             if (userIsAlreadyLibrarian)
             {

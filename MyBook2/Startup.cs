@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using MyBook2.Data;
 using MyBook2.Infrastructure;
 using MyBook2.Services.Books;
+using MyBook2.Services.Librarians;
 using MyBook2.Services.Statistics;
 
 namespace MyBook2
@@ -37,9 +39,15 @@ namespace MyBook2
                 })
                 .AddEntityFrameworkStores<MyBook2DbContext>();
 
-            services.AddControllersWithViews();
-            services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
+
             services.AddTransient<IBookService, BookService>();
+            services.AddTransient<ILibrarianService, LibrarianService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

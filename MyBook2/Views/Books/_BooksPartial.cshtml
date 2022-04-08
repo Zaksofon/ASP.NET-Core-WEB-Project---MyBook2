@@ -1,0 +1,34 @@
+﻿@model IEnumerable<BookServiceModel>
+
+@{
+	ViewData["Title"] = "My Books";
+}
+
+@if (!Model.Any())
+{
+	<h2 class="text-center">No Books in your library yet!</h2>
+}
+
+<div class="row">
+	@foreach (var book in Model)
+	{
+		<div class="col-md-4">
+			<div class="card mb-4">
+				<div class="w-100 p-1" style="background-color: #eee;">book cover</div>
+				<img class="card-img align-items-center" src="@book.ImageUrl" alt="@book.Title @book.Author - @book.IssueYear (@book.GenreName)">
+				<div class="card-body text-center">
+					<h5 class="card-title text-center">"@book.Title"</h5>
+					<h5 class="card-title text-center">@book.Author</h5>
+					<h5 class="card-title text-center">(@book.GenreName)</h5>
+					<a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary">Details</a>
+
+					@if (ViewBag.AllowBookEditing == true)
+					{
+						<a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning">Edit</a>
+						<a asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
+					}
+				</div>
+			</div>
+		</div>
+	}
+</div>

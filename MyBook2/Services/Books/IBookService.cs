@@ -6,6 +6,33 @@ namespace MyBook2.Services.Books
     {
         BookQueryServiceModel All(string author, string searchTerm, int currentPage, int booksPerPage);
 
-        IEnumerable<string> AllBooksAuthors();
+        BookDetailsServiceModel Details(int bookId);
+
+        int Create(
+            string title, 
+            string author, 
+            string description, 
+            string imageUrl, 
+            int genreId, 
+            int issueYear,
+            int librarianId);
+
+        bool Edit(int bookId,
+            string title,
+            string author,
+            string description,
+            string imageUrl,
+            int genreId,
+            int issueYear);
+
+        IEnumerable<BookServiceModel> ByUser(string userId);
+
+        IEnumerable<string> AllAuthors();
+
+        bool IsByLibrarian(int bookId, int librarianId);
+
+        IEnumerable<BookGenreServiceModel> AllGenres();
+
+        bool GenreExists(int genreId);
     }
 }

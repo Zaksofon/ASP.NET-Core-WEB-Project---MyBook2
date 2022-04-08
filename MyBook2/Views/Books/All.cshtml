@@ -72,23 +72,7 @@
 	</div>
 </form>
 
-<div class="row">
-	@foreach (var book in Model.Books)
-	{
-		<div class="col-md-4">
-			<div class="card mb-4">
-				<div class="w-100 p-1" style="background-color: #eee;">book cover</div>
-				<img class="card-img align-items-center" src="@book.ImageUrl" alt="@book.Title @book.Author - @book.IssueYear (@book.Genre)">
-				<div class="card-body text-center">
-					<h5 class="card-title text-center">"@book.Title"</h5>
-					<h5 class="card-title text-center">@book.Author</h5>
-					<h5 class="card-title text-center">(@book.Genre)</h5>
-					<a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary">Details</a>
-				</div>
-			</div>
-		</div>
-	}
-</div>
+<partial name="_BooksPartial" model="@Model.Books" />
 
 
 

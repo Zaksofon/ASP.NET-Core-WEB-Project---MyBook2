@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MyBook2.Data.Models;
+using MyBook2.Services.Books;
 
 namespace MyBook2.Models.Book
 {
-    public class AddBookFormModel
+    public class BookFormModel
     {
         [Required]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Title must be text with length between 2 and 50 characters.")]
@@ -30,6 +30,6 @@ namespace MyBook2.Models.Book
         [Display(Name = "Genre")]
         public int GenreId { get; init; }
 
-        public IEnumerable<BookGenreViewModel> Genres { get; set; }
+        public IEnumerable<BookGenreServiceModel> Genres { get; set; }
     }
 }

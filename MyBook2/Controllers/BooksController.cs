@@ -1,24 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyBook2.Data;
-using MyBook2.Data.Models;
 using MyBook2.Infrastructure;
 using MyBook2.Models.Book;
-using System.Collections.Generic;
-using System.Linq;
 using MyBook2.Services.Books;
+using MyBook2.Services.Librarians;
 
 namespace MyBook2.Controllers
 {
     public class BooksController : Controller
     {
         private readonly IBookService books;
-        private readonly MyBook2DbContext data;
+        private readonly ILibrarianService librarians;
 
-        public BooksController(MyBook2DbContext data, IBookService books)
+        public BooksController(IBookService books, ILibrarianService librarians)
         {
-            this.data = data;
             this.books = books;
+            this.librarians = librarians;
         }
 
         //AllBooksQueryModel instead of (string author, string searchTerm, AllBooksSorting sorting) in the Method below!
@@ -27,7 +24,7 @@ namespace MyBook2.Controllers
             var queryResult = this.books
                 .All(query.Author, query.SearchTerm, query.CurrentPage, AllBooksQueryModel.BooksPerPage);
 
-            var bookAuthors = this.books.AllBooksAuthors();
+            var bookAuthors = this.books.AllAuthors();
 
             query.TotalBooks = queryResult.TotalBooks;
             query.Authors = bookAuthors;
@@ -37,80 +34,115 @@ namespace MyBook2.Controllers
         }
 
         [Authorize]
+        public IActionResult Mine()
+        {
+            var myBooks = this.books.ByUser(User.Id());
+
+            return View(myBooks);
+        }
+
+        [Authorize]
         public IActionResult Add()
         {
-            if (!UserIsLibrarian())
+            if (!librarians.IsLibrarian(User.Id()))
             {
                 return RedirectToAction(nameof(LibrariansController.Become), "Librarians");
             }
 
-            return View(new AddBookFormModel
+            return View(new BookFormModel
             {
-                Genres = GetBookGenre()
+                Genres = books.AllGenres()
             });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddBookFormModel book)
+        public IActionResult Add(BookFormModel book)
         {
-            var librarianId = data
-                .Librarians
-                .Where(l => l.UserId == User.GetId())
-                .Select(l => l.Id)
-                .FirstOrDefault();
+            var librarianId = librarians.IdByUser(this.User.Id());
 
             if (librarianId == 0)
             {
                 return RedirectToAction(nameof(LibrariansController.Become), "Librarians");
             }
 
-            if (!data.Genres.Any(g => g.Id == book.GenreId))
+            if (!books.GenreExists(book.GenreId))
             {
                 ModelState.AddModelError(nameof(book.GenreId), "Genre does not exist.");
             }
 
             if (!ModelState.IsValid)
             {
-                book.Genres = GetBookGenre();
+                book.Genres = books.AllGenres();
 
                 return View(book);
             }
 
-            var bookLibrary = new Book
+            this.books.Create(book.Title, book.Author, book.Description, book.ImageUrl, book.GenreId, book.IssueYear, librarianId);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.Id();
+
+            if (!librarians.IsLibrarian(User.Id()))
+            {
+                return RedirectToAction(nameof(LibrariansController.Become), "Librarians");
+            }
+
+            var book = this.books.Details(id);
+
+            if (book.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            return View(new BookFormModel
             {
                 Title = book.Title,
                 Author = book.Author,
                 Description = book.Description,
                 ImageUrl = book.ImageUrl,
-                GenreId = book.GenreId,
                 IssueYear = book.IssueYear,
-                LibrarianId = librarianId
-            };
-
-            data.Books.Add(bookLibrary);
-
-            data.SaveChanges(); 
-
-            return RedirectToAction(nameof(All));
+                GenreId = book.GenreId,
+                Genres = books.AllGenres()
+            });
         }
 
-        private IEnumerable<BookGenreViewModel> GetBookGenre() => data
-                .Genres
-                .Select(g => new BookGenreViewModel()
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                })
-                .ToList();
-
-        private bool UserIsLibrarian()
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, BookFormModel book)
         {
-            var userId = User.GetId();
+            var librarianId = librarians.IdByUser(this.User.Id());
 
-            return this.data
-                .Librarians
-                .Any(l => l.UserId == userId);
+            if (librarianId == 0)
+            {
+                return RedirectToAction(nameof(LibrariansController.Become), "Librarians");
+            }
+
+            if (!books.GenreExists(book.GenreId))
+            {
+                ModelState.AddModelError(nameof(book.GenreId), "Genre does not exist.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                book.Genres = books.AllGenres();
+
+                return View(book);
+            }
+
+            if (!books.IsByLibrarian(id, librarianId))
+            {
+                return BadRequest();
+            }
+
+            books.Edit(id, book.Title, book.Author, book.Description, book.ImageUrl, book.GenreId, book.IssueYear);
+
+            return RedirectToAction(nameof(All));
         }
     }
 }

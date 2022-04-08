@@ -12,6 +12,6 @@
 
         public int IssueYear { get; init; }
 
-        public string Genre { get; init; }
+        public string GenreName { get; init; }
     }
 }
