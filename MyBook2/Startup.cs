@@ -61,6 +61,7 @@ namespace MyBook2
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
             }
+
             else
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -75,6 +76,10 @@ namespace MyBook2
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "Areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });

@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using MyBook2.Areas.Admin;
 using MyBook2.Data;
 using MyBook2.Data.Models;
 
 namespace MyBook2.Infrastructure
 {
-    using static WebConstants;
+    using static AdminConstants;
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder PrepareDatabase(

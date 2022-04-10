@@ -1,8 +1,9 @@
 ﻿using System.Security.Claims;
+using MyBook2.Areas.Admin;
 
 namespace MyBook2.Infrastructure
 {
-    using static WebConstants;
+    using static AdminConstants;
     public static class ClaimsPrincipalExtensions
     {
         public static string Id(this ClaimsPrincipal user)
