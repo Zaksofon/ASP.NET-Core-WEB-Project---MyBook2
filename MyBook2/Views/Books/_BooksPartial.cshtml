@@ -22,7 +22,7 @@
 					<h5 class="card-title text-center">(@book.GenreName)</h5>
 					<a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary">Details</a>
 
-					@if (ViewBag.AllowBookEditing == true)
+					@if (ViewBag.AllowBookEditing == true || User.UserIsAdmin())
 					{
 						<a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning">Edit</a>
 						<a asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>

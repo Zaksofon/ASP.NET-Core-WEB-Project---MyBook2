@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyBook2.Data.Models;
 
 namespace MyBook2.Data
 {
-    public class MyBook2DbContext : IdentityDbContext
+    public class MyBook2DbContext : IdentityDbContext<User>
     {
         public MyBook2DbContext(DbContextOptions<MyBook2DbContext> options)
             : base(options)
@@ -34,7 +34,7 @@ namespace MyBook2.Data
 
             builder
                 .Entity<Librarian>()
-                .HasOne<IdentityUser>()
+                .HasOne<User>()
                 .WithOne()
                 .HasForeignKey<Librarian>(l => l.UserId)
                 .OnDelete(DeleteBehavior.Restrict);

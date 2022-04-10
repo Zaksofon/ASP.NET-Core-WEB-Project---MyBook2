@@ -1,22 +1,25 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using MyBook2.Services.Librarians
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@using MyBook2.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @inject ILibrarianService Librarians
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-	var userIsLibrarian = Librarians.IsLibrarian(User.Id());
+	var userId = User.Id();
+	var userIsLibrarian = Librarians.IsLibrarian(userId);
+	var userIsAdmin = User.UserIsAdmin();
 
-	if (userIsLibrarian)
+	@if (userIsLibrarian && !userIsAdmin)
 	{
 		<li class="nav-item">
 			<a  class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Mine">My Books</a>
 		</li>
 	}
 
-	else
+	else if (!userIsAdmin)
 	{
 		<li class="nav-item">
 			<a  class="nav-link text-dark" asp-area="" asp-controller="Librarians" asp-action="Become">Be a Librarian</a>

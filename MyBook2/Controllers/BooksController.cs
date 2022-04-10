@@ -88,14 +88,14 @@ namespace MyBook2.Controllers
         {
             var userId = this.User.Id();
 
-            if (!librarians.IsLibrarian(User.Id()))
+            if (!librarians.IsLibrarian(userId) && !User.UserIsAdmin())
             {
                 return RedirectToAction(nameof(LibrariansController.Become), "Librarians");
             }
 
             var book = this.books.Details(id);
 
-            if (book.UserId != userId)
+            if (book.UserId != userId && !User.UserIsAdmin())
             {
                 return Unauthorized();
             }
@@ -118,7 +118,7 @@ namespace MyBook2.Controllers
         {
             var librarianId = librarians.IdByUser(this.User.Id());
 
-            if (librarianId == 0)
+            if (librarianId == 0 && !User.UserIsAdmin())
             {
                 return RedirectToAction(nameof(LibrariansController.Become), "Librarians");
             }
@@ -135,7 +135,7 @@ namespace MyBook2.Controllers
                 return View(book);
             }
 
-            if (!books.IsByLibrarian(id, librarianId))
+            if (!books.IsByLibrarian(id, librarianId) && !User.UserIsAdmin())
             {
                 return BadRequest();
             }

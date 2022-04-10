@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyBook2.Data;
+using MyBook2.Data.Models;
 using MyBook2.Infrastructure;
 using MyBook2.Services.Books;
 using MyBook2.Services.Librarians;
@@ -25,18 +26,20 @@ namespace MyBook2
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MyBook2DbContext>(options => options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<MyBook2DbContext>(options => options
+                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services
+                .AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<MyBook2DbContext>();
 
             services.AddControllersWithViews(options =>
@@ -47,7 +50,6 @@ namespace MyBook2
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<ILibrarianService, LibrarianService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
-            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -64,11 +66,10 @@ namespace MyBook2
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
