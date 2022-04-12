@@ -8,6 +8,7 @@ using MyBook2.Services.Librarians;
 
 namespace MyBook2.Controllers
 {
+    using static WebConstants;
     public class BooksController : Controller
     {
         private readonly IBookService books;
@@ -83,6 +84,8 @@ namespace MyBook2.Controllers
 
             this.books.Create(book.Title, book.Author, book.Description, book.ImageUrl, book.GenreId, book.IssueYear, librarianId);
 
+            TempData[GlobalMessageKey] = "Your book have been saved successfully!";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -140,6 +143,8 @@ namespace MyBook2.Controllers
             }
 
             books.Edit(id, book.Title, book.Author, book.Description, book.ImageUrl, book.GenreId, book.IssueYear);
+
+            TempData[GlobalMessageKey] = "Your Book is edited!";
 
             return RedirectToAction(nameof(All));
         }

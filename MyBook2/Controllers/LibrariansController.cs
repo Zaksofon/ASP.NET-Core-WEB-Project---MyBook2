@@ -8,6 +8,7 @@ using MyBook2.Models.Librarians;
 
 namespace MyBook2.Controllers
 {
+    using static WebConstants;
     public class LibrariansController : Controller
     {
         private readonly MyBook2DbContext data;
@@ -46,6 +47,8 @@ namespace MyBook2.Controllers
 
             data.Librarians.Add(librarianData);
             data.SaveChanges();
+
+            TempData[GlobalMessageKey] = "You are now a Librarian!";
 
             return RedirectToAction("All", "Books");
         }
