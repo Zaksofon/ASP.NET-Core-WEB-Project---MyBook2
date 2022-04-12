@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBook2.Infrastructure;
 using MyBook2.Models.Book;
@@ -11,11 +12,13 @@ namespace MyBook2.Controllers
     {
         private readonly IBookService books;
         private readonly ILibrarianService librarians;
+        private readonly IMapper mapper;
 
-        public BooksController(IBookService books, ILibrarianService librarians)
+        public BooksController(IBookService books, ILibrarianService librarians, IMapper mapper)
         {
             this.books = books;
             this.librarians = librarians;
+            this.mapper = mapper;
         }
 
         //AllBooksQueryModel instead of (string author, string searchTerm, AllBooksSorting sorting) in the Method below!
@@ -100,16 +103,12 @@ namespace MyBook2.Controllers
                 return Unauthorized();
             }
 
-            return View(new BookFormModel
-            {
-                Title = book.Title,
-                Author = book.Author,
-                Description = book.Description,
-                ImageUrl = book.ImageUrl,
-                IssueYear = book.IssueYear,
-                GenreId = book.GenreId,
-                Genres = books.AllGenres()
-            });
+            // AutoMapper when Linq (.Select query) has not been used - THERE'S A DIFFERENCE BETWEEN THESE TWO IMPLEMENTATIONS!
+            var bookForm = mapper.Map<BookFormModel>(book);    
+
+            bookForm.Genres = books.AllGenres();
+
+            return View(bookForm);
         }
 
         [HttpPost]

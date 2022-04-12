@@ -1,6 +1,6 @@
 ﻿namespace MyBook2.Models.Home
 {
-    public class BookIndexViewModel
+    public class LatestBookServiceModel
     {
         public int Id { get; init; }
 

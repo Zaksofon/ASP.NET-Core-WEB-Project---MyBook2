@@ -2,16 +2,21 @@
 using MyBook2.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using MyBook2.Models.Home;
 
 namespace MyBook2.Services.Books
 {
     public class BookService : IBookService
     {
         private readonly MyBook2DbContext data;
+        private readonly IMapper mapper;
 
-        public BookService(MyBook2DbContext data)
+        public BookService(MyBook2DbContext data, IMapper mapper)
         {
             this.data = data;
+            this.mapper = mapper;
         }
 
         public int Create(string title, string author, string description, string imageUrl, int genreId, int issueYear, int librarianId)
@@ -94,24 +99,22 @@ namespace MyBook2.Services.Books
             };
         }
 
+        public IEnumerable<LatestBookServiceModel> Latest()
+        {
+            return data
+                .Books
+                .OrderByDescending(b => b.Id)
+                .ProjectTo<LatestBookServiceModel>(this.mapper.ConfigurationProvider) // AutoMapper instead of Linq (.Select query)
+                .Take(3)
+                .ToList();
+        }
+
         public BookDetailsServiceModel Details(int id)
         {
             return this.data
                 .Books
                 .Where(b => b.Id == id)
-                .Select(b => new BookDetailsServiceModel
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    Description = b.Description,
-                    Author = b.Author,
-                    IssueYear = b.IssueYear,
-                    ImageUrl = b.ImageUrl,
-                    GenreName = b.Genre.Name,
-                    LibrarianId = b.LibrarianId,
-                    LibrarianName = b.Librarian.Name,
-                    UserId = b.Librarian.UserId
-                })
+                .ProjectTo<BookDetailsServiceModel>(this.mapper.ConfigurationProvider) // AutoMapper instead of Linq (.Select query)
                 .FirstOrDefault();
         }
 

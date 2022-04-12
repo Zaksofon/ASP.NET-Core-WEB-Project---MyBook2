@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using MyBook2.Models.Home;
 
 namespace MyBook2.Services.Books
 {
     public interface IBookService
     {
         BookQueryServiceModel All(string author, string searchTerm, int currentPage, int booksPerPage);
+
+        IEnumerable<LatestBookServiceModel> Latest();
 
         BookDetailsServiceModel Details(int bookId);
 

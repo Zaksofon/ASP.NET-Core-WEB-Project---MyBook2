@@ -39,8 +39,11 @@ namespace MyBook2
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
+
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<MyBook2DbContext>();
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllersWithViews(options =>
             {
@@ -76,10 +79,7 @@ namespace MyBook2
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "Areas",
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
+                endpoints.MapDefaultAreaRoute();
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });

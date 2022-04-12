@@ -10,6 +10,6 @@ namespace MyBook2.Models.Home
 
         public int TotalRents { get; init; }
 
-        public List<BookIndexViewModel> Books { get; init; }
+        public IList<LatestBookServiceModel> Books { get; init; }
     }
 }

@@ -1,40 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyBook2.Data;
 using MyBook2.Models;
 using MyBook2.Models.Home;
+using MyBook2.Services.Books;
+using MyBook2.Services.Statistics;
 using System.Diagnostics;
 using System.Linq;
-using MyBook2.Services.Statistics;
 
 namespace MyBook2.Controllers
 {
-	public class HomeController : Controller
+    public class HomeController : Controller
     {
         private readonly IStatisticsService statistics;
-        private readonly MyBook2DbContext data;
+        private readonly IBookService books;
 
-        public HomeController(IStatisticsService statistics, MyBook2DbContext data)
+        public HomeController(IStatisticsService statistics, IBookService books)
         {
             this.statistics = statistics;
-            this.data = data;
+            this.books = books;
         }
         public IActionResult Index()
         {
-            var totalBooks = this.data.Books.Count();
+            //var totalBooks = this.data.Books.Count();
 
-            var books = data
-                .Books
-                .OrderByDescending(b => b.Id)
-                .Select(b => new BookIndexViewModel()
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    Author = b.Author,
-                    IssueYear = b.IssueYear,
-                    ImageUrl = b.ImageUrl
-                })
-                .Take(3)
-                .ToList();
+            var latestBooks = this.books.Latest().ToList(); 
 
             var totalStatistics = this.statistics.Total();
 
@@ -42,7 +30,7 @@ namespace MyBook2.Controllers
             {
                 TotalBooks = totalStatistics.TotalBooks,
                 TotalUsers = totalStatistics.TotalUsers,
-                Books = books,
+                Books = latestBooks
             });
         }
 

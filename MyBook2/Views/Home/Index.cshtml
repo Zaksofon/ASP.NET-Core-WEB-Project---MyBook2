@@ -1,16 +1,9 @@
 ﻿@model IndexViewModel
 @{
-    ViewData["Title"] = "Welcome";
+    ViewBag.Title = "Welcome";
 }
 
-@{
-	var books = Model.Books;
-	var firstBook = books.Any() ? books[0] : null;
-	var secondBook = books.Count > 1 ? books[1] : null;
-	var thirdBook = books.Count > 2 ? books[2] : null;
-}
-
-@if (!books.Any())
+@if (!Model.Books.Any())
 {
 	<div class="jumbotron">
 		<h1 class="display-4">Book your book!</h1>
@@ -20,41 +13,23 @@
 	</div>
 }
 
+<div class="mb-5"></div>
+
 <div id="carouselExampleControls" class="carousel slide mt-5" data-ride="carousel">
 	<div class="carousel-inner">
-		@if (firstBook != null)
+		@for (int i = 0; i < Model.Books.Count(); i++)
 		{
-			<div class="carousel-item active align-items-center">
-				<img class="d-block w-25" src="@firstBook.ImageUrl" alt="@firstBook.Title @firstBook.Author">
+			var book = Model.Books[i];
+			<div class="carousel-item @(i == 0 ? "active" : string.Empty)">
+				<img class="d-block w-25" src="@book.ImageUrl" alt="@book.Title @book.Author">
 				<div class="carousel-caption d-none d-md-block">
 					<h5><a class="btn btn-primary" asp-controller="Books" 
 					       asp-action="Details" 
-					       asp-route-id="@firstBook.Id">"@firstBook.Title" - @firstBook.Author</a></h5>
+					       asp-route-id="@book.Id">"@book.Title" - @book.Author</a></h5>
 				</div>
 			</div>
 		}
-		@if (secondBook != null)
-		{
-			<div class="carousel-item">
-				<img class="d-block w-25" src="@secondBook.ImageUrl" alt="@secondBook.Title @secondBook.Author">
-				<div class="carousel-caption d-none d-md-block">
-					<h5><a class="btn btn-primary" asp-controller="Books" 
-					       asp-action="Details" 
-					       asp-route-id="@secondBook.Id">"@secondBook.Title" - @secondBook.Author</a></h5>
-				</div>
-			</div>
-		}
-		@if (thirdBook != null)
-		{
-			<div class="carousel-item">
-				<img class="d-block w-25" src="@thirdBook.ImageUrl" alt="@thirdBook.Title @thirdBook.Author">
-				<div class="carousel-caption d-none d-md-block">
-					<h5><a class="btn btn-primary" asp-controller="Books" 
-					       asp-action="Details" 
-					       asp-route-id="@thirdBook.Id">"@thirdBook.Title" - @thirdBook.Author</a></h5>
-				</div>
-			</div>
-		}
+
 	</div>
 	<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
 		<span class="carousel-control-prev-icon btn btn-primary" aria-hidden="true"></span>
