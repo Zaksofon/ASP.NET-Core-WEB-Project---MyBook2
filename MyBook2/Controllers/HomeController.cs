@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using MyBook2.Models;
 using MyBook2.Models.Home;
 using MyBook2.Services.Books;
 using MyBook2.Services.Statistics;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace MyBook2.Controllers
 {
@@ -12,17 +15,33 @@ namespace MyBook2.Controllers
     {
         private readonly IStatisticsService statistics;
         private readonly IBookService books;
+        private readonly IMemoryCache cache;
 
-        public HomeController(IStatisticsService statistics, IBookService books)
+        public HomeController(IStatisticsService statistics, IBookService books, IMemoryCache cache)
         {
             this.statistics = statistics;
             this.books = books;
+            this.cache = cache;
         }
         public IActionResult Index()
         {
             //var totalBooks = this.data.Books.Count();
 
-            var latestBooks = this.books.Latest().ToList(); 
+            const string latestBooksCacheKey = "LatestBooksCacheKey";
+
+            var latestBooks = cache.Get<List<LatestBookServiceModel>>(latestBooksCacheKey);
+
+            if (latestBooks == null)
+            {
+                latestBooks = books
+                    .Latest()
+                    .ToList();
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));
+
+                cache.Set(latestBooksCacheKey, latestBooks);
+            }
 
             var totalStatistics = this.statistics.Total();
 

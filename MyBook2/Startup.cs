@@ -44,6 +44,7 @@ namespace MyBook2
                 .AddEntityFrameworkStores<MyBook2DbContext>();
 
             services.AddAutoMapper(typeof(Startup));
+            services.AddMemoryCache();
 
             services.AddControllersWithViews(options =>
             {
