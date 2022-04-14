@@ -1,6 +1,8 @@
-﻿namespace MyBook2.Models.Home
+﻿using MyBook2.Services.Books.Models;
+
+namespace MyBook2.Models.Home
 {
-    public class LatestBookServiceModel
+    public class LatestBookServiceModel : IBookModel
     {
         public int Id { get; init; }
 

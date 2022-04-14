@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using MyBook2.Areas.Admin;
 
-namespace MyBook2.Infrastructure
+namespace MyBook2.Infrastructure.Extensions
 {
     using static AdminConstants;
     public static class ClaimsPrincipalExtensions

@@ -1,0 +1,44 @@
+﻿@using MyBook2.Infrastructure
+@using MyBook2.Infrastructure.Extensions
+@model IEnumerable<MyBook2.Services.Books.Models.BookServiceModel>
+
+@{
+	ViewBag.Title = "Become Librarian";
+}
+
+<h1 class="text-center mt-5">All Books</h1>
+
+<table class="table table-bordered mt-4">
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Title</th>
+			<th scope="col">Author</th>
+			<th scope="col">IssueYear</th>
+			<th scope="col">Genre</th>
+			<th scope="col">Approved</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var book in Model)
+		{
+			<tr>
+				<td scope="col">@book.Id</td>
+				<td scope="col">@book.Title</td>
+				<td scope="col">@book.Author</td>
+				<td scope="col">@book.IssueYear</td>
+				<td scope="col">@book.GenreName</td>
+				<td scope="col">@(book.IsPublic ? "Yes" : "No")</td>
+				<td scope="col">
+					<a asp-area="" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger float-right ml-1">Delete</a>
+					<a asp-area="" asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning float-right ml-1">Edit</a>
+					<a asp-area="Admin" asp-controller="Books" asp-action="Change" asp-route-id="@book.Id" class="btn btn-info float-right ml-1">@(book.IsPublic ? "Hide" : "Publish")</a>
+					<a asp-area="" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()" class="btn btn-primary float-right ml-1">Details</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+

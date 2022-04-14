@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBook2.Data;
 using MyBook2.Data.Models;
-using MyBook2.Infrastructure;
+using MyBook2.Infrastructure.Extensions;
 using MyBook2.Models.Librarians;
+using System.Linq;
 
 namespace MyBook2.Controllers
 {

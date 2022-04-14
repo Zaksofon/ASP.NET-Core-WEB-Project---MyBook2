@@ -1,19 +1,20 @@
-﻿using MyBook2.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using MyBook2.Data;
 using MyBook2.Data.Models;
+using MyBook2.Models.Home;
+using MyBook2.Services.Books.Models;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MyBook2.Models.Home;
 
 namespace MyBook2.Services.Books
 {
     public class BookService : IBookService
     {
         private readonly MyBook2DbContext data;
-        private readonly IMapper mapper;
+        private readonly IConfigurationProvider mapper;
 
-        public BookService(MyBook2DbContext data, IMapper mapper)
+        public BookService(MyBook2DbContext data, IConfigurationProvider mapper)
         {
             this.data = data;
             this.mapper = mapper;
@@ -29,7 +30,8 @@ namespace MyBook2.Services.Books
                 ImageUrl = imageUrl,
                 GenreId = genreId,
                 IssueYear = issueYear,
-                LibrarianId = librarianId
+                LibrarianId = librarianId,
+                IsPublic = false
             };
 
             data.Books.Add(bookLibrary);
@@ -38,7 +40,7 @@ namespace MyBook2.Services.Books
             return bookLibrary.Id;
         }
 
-        public bool Edit(int id, string title, string author, string description, string imageUrl, int genreId, int issueYear)
+        public bool Edit(int id, string title, string author, string description, string imageUrl, int genreId, int issueYear, bool isPublic)
         {
             var bookLibrary = this.data.Books.Find(id);
 
@@ -53,15 +55,22 @@ namespace MyBook2.Services.Books
             bookLibrary.ImageUrl = imageUrl;
             bookLibrary.GenreId = genreId;
             bookLibrary.IssueYear = issueYear;
+            bookLibrary.IsPublic = isPublic;
 
             data.SaveChanges();
 
             return true;
         }
 
-        public BookQueryServiceModel All(string author, string searchTerm, int currentPage, int booksPerPage)
+        public BookQueryServiceModel All(
+            string author = null,
+            string searchTerm = null,
+            int currentPage = 1,
+            int booksPerPage = int.MaxValue,
+            bool publicOnly = true)
         {
-            var booksQuery = data.Books.AsQueryable();
+            var booksQuery = data.Books
+                .Where(b => !publicOnly || b.IsPublic);
 
             if (!string.IsNullOrWhiteSpace(author))
             {
@@ -103,8 +112,9 @@ namespace MyBook2.Services.Books
         {
             return data
                 .Books
+                .Where(b => b.IsPublic)
                 .OrderByDescending(b => b.Id)
-                .ProjectTo<LatestBookServiceModel>(this.mapper.ConfigurationProvider) // AutoMapper instead of Linq (.Select query)
+                .ProjectTo<LatestBookServiceModel>(this.mapper) // AutoMapper instead of Linq (.Select query)
                 .Take(3)
                 .ToList();
         }
@@ -114,7 +124,7 @@ namespace MyBook2.Services.Books
             return this.data
                 .Books
                 .Where(b => b.Id == id)
-                .ProjectTo<BookDetailsServiceModel>(this.mapper.ConfigurationProvider) // AutoMapper instead of Linq (.Select query)
+                .ProjectTo<BookDetailsServiceModel>(this.mapper) // AutoMapper instead of Linq (.Select query)
                 .FirstOrDefault();
         }
 
@@ -128,6 +138,15 @@ namespace MyBook2.Services.Books
         public bool IsByLibrarian(int bookId, int librarianId)
         {
             return data.Books.Any(b => b.Id == bookId && b.LibrarianId == librarianId);
+        }
+
+        public void Change(int bookId)
+        {
+            var book = data.Books.Find(bookId);
+
+            book.IsPublic = !book.IsPublic;
+
+            data.SaveChanges();
         }
 
         public IEnumerable<string> AllAuthors()
@@ -144,28 +163,17 @@ namespace MyBook2.Services.Books
         {
             return data
                 .Genres
-                .Select(g => new BookGenreServiceModel()
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                })
+                .ProjectTo<BookGenreServiceModel>(mapper)
                 .ToList();
         }
 
         public bool GenreExists(int genreId) =>
             data.Genres.Any(g => g.Id == genreId);
 
-        private static IEnumerable<BookServiceModel> GetBooks(IQueryable<Book> bookQuery)
+        private IEnumerable<BookServiceModel> GetBooks(IQueryable<Book> bookQuery)
         {
-            return bookQuery.Select(b => new BookServiceModel
-            {
-                Id = b.Id,
-                Title = b.Title,
-                Author = b.Author,
-                IssueYear = b.IssueYear,
-                ImageUrl = b.ImageUrl,
-                GenreName = b.Genre.Name
-            })
+            return bookQuery
+                .ProjectTo<BookServiceModel>(mapper)
                 .ToList();
         }
     }

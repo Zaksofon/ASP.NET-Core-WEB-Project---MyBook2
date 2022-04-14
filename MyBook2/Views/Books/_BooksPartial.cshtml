@@ -1,7 +1,9 @@
-﻿@model IEnumerable<BookServiceModel>
+﻿@using MyBook2.Infrastructure
+@using MyBook2.Infrastructure.Extensions
+@model IEnumerable<MyBook2.Services.Books.Models.BookServiceModel>
 
 @{
-	ViewData["Title"] = "My Books";
+	ViewBag.Title = "My Books";
 }
 
 @if (!Model.Any())
@@ -20,7 +22,11 @@
 					<h5 class="card-title text-center">"@book.Title"</h5>
 					<h5 class="card-title text-center">@book.Author</h5>
 					<h5 class="card-title text-center">(@book.GenreName)</h5>
-					<a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary">Details</a>
+					<a asp-controller="Books" 
+					   asp-action="Details" 
+					   asp-route-id="@book.Id" 
+					   asp-route-information="@book.GetInformation()" 
+					   class="btn btn-primary">Details</a>
 
 					@if (ViewBag.AllowBookEditing == true || User.UserIsAdmin())
 					{

@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyBook2.Data;
 using MyBook2.Data.Models;
-using MyBook2.Infrastructure;
+using MyBook2.Infrastructure.Extensions;
 using MyBook2.Services.Books;
 using MyBook2.Services.Librarians;
 using MyBook2.Services.Statistics;
@@ -81,6 +81,12 @@ namespace MyBook2
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultAreaRoute();
+
+                endpoints.MapControllerRoute(
+                    name: "Book Details",
+                    pattern: "/Books/Details/{id}/{information}",
+                    defaults: new { controller = "Books", action = "Details" });
+
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });

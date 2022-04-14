@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MyBook2.Services.Books;
+using MyBook2.Services.Books.Models;
 
 namespace MyBook2.Models.Book
 {
-    public class BookFormModel
+    public class BookFormModel : IBookModel
     {
         [Required]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Title must be text with length between 2 and 50 characters.")]

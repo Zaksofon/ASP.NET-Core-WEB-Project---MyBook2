@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 using MyBook2.Models.Home;
+using MyBook2.Services.Books.Models;
 
 namespace MyBook2.Services.Books
 {
     public interface IBookService
     {
-        BookQueryServiceModel All(string author, string searchTerm, int currentPage, int booksPerPage);
+        BookQueryServiceModel All(
+            string author = null, 
+            string searchTerm = null,
+            int currentPage = 1,
+            int booksPerPage = int.MaxValue,
+            bool publicOnly = true);
 
         IEnumerable<LatestBookServiceModel> Latest();
 
@@ -26,13 +32,16 @@ namespace MyBook2.Services.Books
             string description,
             string imageUrl,
             int genreId,
-            int issueYear);
+            int issueYear,
+            bool isPublic);
 
         IEnumerable<BookServiceModel> ByUser(string userId);
 
-        IEnumerable<string> AllAuthors();
-
         bool IsByLibrarian(int bookId, int librarianId);
+
+        void Change(int bookId);
+
+        IEnumerable<string> AllAuthors();
 
         IEnumerable<BookGenreServiceModel> AllGenres();
 

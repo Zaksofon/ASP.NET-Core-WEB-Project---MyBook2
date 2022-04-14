@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyBook2.Infrastructure;
+using MyBook2.Infrastructure.Extensions;
 using MyBook2.Models.Book;
 using MyBook2.Services.Books;
 using MyBook2.Services.Librarians;
@@ -45,6 +46,18 @@ namespace MyBook2.Controllers
             return View(myBooks);
         }
 
+        public IActionResult Details(int id, string information)
+        {
+            var book = books.Details(id);
+
+            if (information != book.GetInformation())
+            {
+                return BadRequest();
+            }
+
+            return View(book);
+        }
+
         [Authorize]
         public IActionResult Add()
         {
@@ -82,11 +95,11 @@ namespace MyBook2.Controllers
                 return View(book);
             }
 
-            this.books.Create(book.Title, book.Author, book.Description, book.ImageUrl, book.GenreId, book.IssueYear, librarianId);
+            var bookId = books.Create(book.Title, book.Author, book.Description, book.ImageUrl, book.GenreId, book.IssueYear, librarianId);
 
-            TempData[GlobalMessageKey] = "Your book have been saved successfully!";
+            TempData[GlobalMessageKey] = "Your book have been saved successfully! It will be Public as soon as Administrator approved it - that may take few minutes.";
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details), new { id = bookId, information = book.GetInformation() });
         }
 
         [Authorize]
@@ -142,11 +155,20 @@ namespace MyBook2.Controllers
                 return BadRequest();
             }
 
-            books.Edit(id, book.Title, book.Author, book.Description, book.ImageUrl, book.GenreId, book.IssueYear);
+            books.Edit(
+                id, 
+                book.Title, 
+                book.Author, 
+                book.Description, 
+                book.ImageUrl, 
+                book.GenreId, 
+                book.IssueYear, 
+                User.UserIsAdmin());
 
-            TempData[GlobalMessageKey] = "Your Book is edited!";
+            TempData[GlobalMessageKey] = 
+                $"Book is edited{(User.UserIsAdmin() ? string.Empty : ", it will be Public as soon as Administrator approved it - that may take few minutes")}!";
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details), new { id, information = book.GetInformation() });
         }
     }
 }

@@ -9,7 +9,7 @@ using MyBook2.Areas.Admin;
 using MyBook2.Data;
 using MyBook2.Data.Models;
 
-namespace MyBook2.Infrastructure
+namespace MyBook2.Infrastructure.Extensions
 {
     using static AdminConstants;
     public static class ApplicationBuilderExtensions

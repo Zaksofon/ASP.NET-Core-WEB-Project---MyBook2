@@ -9,6 +9,5 @@ namespace MyBook2.Areas.Admin.Controllers
     [Authorize(Roles = AdminRoleName)]
     public abstract class AdminController : Controller
     {
-
     }
 }

@@ -30,5 +30,7 @@ namespace MyBook2.Data.Models
         public int LibrarianId { get; init; }
 
         public Librarian Librarian { get; init; }
+
+        public bool IsPublic { get; set; }
     }
 }

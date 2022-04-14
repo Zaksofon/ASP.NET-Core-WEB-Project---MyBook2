@@ -1,4 +1,5 @@
-﻿@model IndexViewModel
+﻿@using MyBook2.Infrastructure.Extensions
+@model IndexViewModel
 @{
     ViewBag.Title = "Welcome";
 }
@@ -23,8 +24,10 @@
 			<div class="carousel-item @(i == 0 ? "active" : string.Empty)">
 				<img class="d-block w-25" src="@book.ImageUrl" alt="@book.Title @book.Author">
 				<div class="carousel-caption d-none d-md-block">
-					<h5><a class="btn btn-primary" asp-controller="Books" 
+					<h5><a class="btn btn-primary"
+					       asp-controller="Books" 
 					       asp-action="Details" 
+					       asp-route-information="@book.GetInformation()"
 					       asp-route-id="@book.Id">"@book.Title" - @book.Author</a></h5>
 				</div>
 			</div>

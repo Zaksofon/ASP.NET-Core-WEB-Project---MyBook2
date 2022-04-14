@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
-namespace MyBook2.Infrastructure
+namespace MyBook2.Infrastructure.Extensions
 {
     public static class EndpointRouteBuilderExtensions
     {

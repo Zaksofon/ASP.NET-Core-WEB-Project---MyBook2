@@ -11,7 +11,7 @@ namespace MyBook2.Services.Statistics
 
         public StatisticsServiceModel Total()
         {
-            var totalBooks = data.Books.Count();
+            var totalBooks = data.Books.Count(b => b.IsPublic);
             var totalUsers = data.Users.Count();
 
             return new StatisticsServiceModel

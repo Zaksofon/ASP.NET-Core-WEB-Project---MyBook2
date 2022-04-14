@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using MyBook2.Infrastructure.Extensions
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -8,55 +9,55 @@
 	<link rel="stylesheet" href="~/css/site.css" />
 </head>
 
-<body style="background-image: url(/green.jpg); 
+<body style="background-image: url(/green.jpg);
 	         background-repeat: no-repeat;
-	         background-attachment: fixed;  
+	         background-attachment: fixed;
 	         background-size: cover;">
-<header>
-	<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-		<div class="container">
-			<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Book a Book</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-			        aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-				<ul class="navbar-nav flex-grow-1">
-					@if (!User.UserIsAdmin())
-					{
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+			<div class="container">
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Book a Book</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1">
+						@if (!User.UserIsAdmin())
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Add">Add Book</a>
+							</li>
+						}
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Add">Add Book</a>
+							<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="All">All Books</a>
 						</li>
-					}
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="All">All Books</a>
-					</li>
-				</ul>
-				<partial name="_LoginPartial"/>
+					</ul>
+					<partial name="_LoginPartial" />
+				</div>
 			</div>
-		</div>
-	</nav>
-</header>
-<div class="container">
-	@if (TempData.ContainsKey(WebConstants.GlobalMessageKey))
-	{
-		<div class="alert alert-success" role="alert">
-			@TempData[WebConstants.GlobalMessageKey]
-		</div>
-	}
-	<main role="main" class="pb-3">
-		@RenderBody()
-	</main>
-</div>
-
-<footer class="border-top footer text-muted">
+		</nav>
+	</header>
 	<div class="container">
-		&copy; @DateTime.UtcNow.Year - MyBook
+		@if (TempData.ContainsKey(WebConstants.GlobalMessageKey))
+		{
+			<div class="alert alert-warning" role="alert">
+				@TempData[WebConstants.GlobalMessageKey]
+			</div>
+		}
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
 	</div>
-</footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			&copy; @DateTime.UtcNow.Year - MyBook
+		</div>
+	</footer>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

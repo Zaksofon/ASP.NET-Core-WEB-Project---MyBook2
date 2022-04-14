@@ -1,5 +1,6 @@
 ﻿@using MyBook2.Data.Models
 @using Microsoft.AspNetCore.Identity
+@using MyBook2.Infrastructure.Extensions
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
@@ -25,8 +26,15 @@
 			<a  class="nav-link text-dark" asp-area="" asp-controller="Librarians" asp-action="Become">Be a Librarian</a>
 		</li>
 	}
+	
+	else if (userIsAdmin)
+	{
+		<li class="nav-item">
+			<a class="nav-link text-dark" asp-area="Admin" asp-controller="Books" asp-action="All">Administration</a>
+		</li>
+	}
 
-	<li class="nav-item">
+		<li class="nav-item">
 		<a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
 	</li>
 	<li class="nav-item">

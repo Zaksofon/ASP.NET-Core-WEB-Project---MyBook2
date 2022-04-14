@@ -1,6 +1,6 @@
-﻿namespace MyBook2.Services.Books
+﻿namespace MyBook2.Services.Books.Models
 {
-    public class BookServiceModel
+    public class BookServiceModel : IBookModel
     {
         public int Id { get; init; }
 
@@ -13,5 +13,7 @@
         public int IssueYear { get; init; }
 
         public string GenreName { get; init; }
+
+        public bool IsPublic { get; init; }
     }
 }
