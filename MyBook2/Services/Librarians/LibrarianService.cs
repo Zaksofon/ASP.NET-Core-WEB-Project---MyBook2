@@ -1,10 +1,5 @@
-﻿using System;
+﻿using MyBook2.Data;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.IdentityModel.Tokens;
-using MyBook2.Data;
-using MyBook2.Data.Models;
 
 namespace MyBook2.Services.Librarians
 {

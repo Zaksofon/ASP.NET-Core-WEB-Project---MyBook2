@@ -1,6 +1,4 @@
-﻿using MyBook2.Services.Books.Models;
-
-namespace MyBook2.Models.Home
+﻿namespace MyBook2.Services.Books.Models
 {
     public class LatestBookServiceModel : IBookModel
     {

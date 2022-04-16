@@ -1,4 +1,4 @@
-﻿namespace MyBook2.Services.Books
+﻿namespace MyBook2.Services.Books.Models
 {
     public class BookGenreServiceModel
     {

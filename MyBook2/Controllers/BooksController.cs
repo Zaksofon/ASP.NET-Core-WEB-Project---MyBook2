@@ -155,7 +155,7 @@ namespace MyBook2.Controllers
                 return BadRequest();
             }
 
-            books.Edit(
+            var edited = books.Edit(
                 id, 
                 book.Title, 
                 book.Author, 
@@ -164,6 +164,11 @@ namespace MyBook2.Controllers
                 book.GenreId, 
                 book.IssueYear, 
                 User.UserIsAdmin());
+
+            if (edited == false)
+            {
+                return BadRequest();
+            }
 
             TempData[GlobalMessageKey] = 
                 $"Book is edited{(User.UserIsAdmin() ? string.Empty : ", it will be Public as soon as Administrator approved it - that may take few minutes")}!";

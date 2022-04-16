@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using MyBook2.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using MyBook2.Models.Home;
 using MyBook2.Services.Books;
+using MyBook2.Services.Books.Models;
 using MyBook2.Services.Statistics;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace MyBook2.Controllers
 {
+    using static WebConstants.Cache;
     public class HomeController : Controller
     {
         private readonly IStatisticsService statistics;
@@ -27,9 +27,7 @@ namespace MyBook2.Controllers
         {
             //var totalBooks = this.data.Books.Count();
 
-            const string latestBooksCacheKey = "LatestBooksCacheKey";
-
-            var latestBooks = cache.Get<List<LatestBookServiceModel>>(latestBooksCacheKey);
+            var latestBooks = cache.Get<List<LatestBookServiceModel>>(LatestBooksCacheKey);
 
             if (latestBooks == null)
             {
@@ -40,7 +38,7 @@ namespace MyBook2.Controllers
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));
 
-                cache.Set(latestBooksCacheKey, latestBooks);
+                cache.Set(LatestBooksCacheKey, latestBooks, cacheOptions);
             }
 
             var totalStatistics = this.statistics.Total();
@@ -52,8 +50,6 @@ namespace MyBook2.Controllers
                 Books = latestBooks
             });
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Error() => View();
     }
 }

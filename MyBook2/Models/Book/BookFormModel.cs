@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using MyBook2.Services.Books.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MyBook2.Services.Books;
-using MyBook2.Services.Books.Models;
 
 namespace MyBook2.Models.Book
 {

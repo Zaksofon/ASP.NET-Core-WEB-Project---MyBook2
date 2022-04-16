@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using MyBook2.Services.Books;
-using MyBook2.Services.Books.Models;
 
-namespace MyBook2.Services
+namespace MyBook2.Services.Books.Models
 {
     public class BookQueryServiceModel
     {
