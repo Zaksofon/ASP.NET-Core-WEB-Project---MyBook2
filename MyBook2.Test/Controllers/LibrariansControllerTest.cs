@@ -11,7 +11,7 @@ using Xunit;
 namespace MyBook2.Test.Controllers
 {
     using static WebConstants;
-    public class DealersControllerTest
+    public class LibrariansControllerTest
     {
         [Fact]
         public void BecomeShouldBeForAuthorizedUsersAndReturnView()

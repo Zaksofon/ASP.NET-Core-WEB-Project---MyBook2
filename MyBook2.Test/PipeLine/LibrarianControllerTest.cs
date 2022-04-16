@@ -57,7 +57,7 @@ namespace MyBook2.Test.PipeLine
                     .RestrictingForAuthorizedRequests())
                 .ValidModelState()
                 .Data(data => data
-                    .WithSet<Librarian>(dealers => dealers
+                    .WithSet<Librarian>(librarian => librarian
                         .Any(l =>
                             l.Name == librarianName &&
                             l.PhoneNumber == phoneNumber &&
