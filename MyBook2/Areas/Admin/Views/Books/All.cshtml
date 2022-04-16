@@ -30,7 +30,7 @@
 				<td scope="col">@book.GenreName</td>
 				<td scope="col">@(book.IsPublic ? "Yes" : "No")</td>
 				<td scope="col">
-					<a asp-area="" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger float-right ml-1">Delete</a>
+					<a asp-area="Admin" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger float-right ml-1">Delete</a>
 					<a asp-area="" asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning float-right ml-1">Edit</a>
 					<a asp-area="Admin" asp-controller="Books" asp-action="Change" asp-route-id="@book.Id" class="btn btn-info float-right ml-1">@(book.IsPublic ? "Hide" : "Publish")</a>
 					<a asp-area="" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()" class="btn btn-primary float-right ml-1">Details</a>

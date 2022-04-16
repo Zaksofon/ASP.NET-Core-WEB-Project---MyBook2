@@ -40,6 +40,7 @@ namespace MyBook2.Services.Books
         bool IsByLibrarian(int bookId, int librarianId);
 
         void Change(int bookId);
+        void Delete(int bookId);
 
         IEnumerable<string> AllAuthors();
 

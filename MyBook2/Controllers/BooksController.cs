@@ -175,5 +175,13 @@ namespace MyBook2.Controllers
 
             return RedirectToAction(nameof(Details), new { id, information = book.GetInformation() });
         }
+
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            books.Delete(id);
+
+            return RedirectToAction(nameof(Mine));
+        }
     }
 }

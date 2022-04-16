@@ -29,5 +29,12 @@ namespace MyBook2.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(All));
         }
+        
+        public IActionResult Delete(int id)
+        {
+            books.Delete(id);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

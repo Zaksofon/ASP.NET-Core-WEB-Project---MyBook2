@@ -149,6 +149,15 @@ namespace MyBook2.Services.Books
             data.SaveChanges();
         }
 
+        public void Delete(int bookId)
+        {
+            var book = data.Books.Find(bookId);
+
+            data.Books.Remove(book);
+
+            data.SaveChanges();
+        }
+
         public IEnumerable<string> AllAuthors()
         {
             return data
