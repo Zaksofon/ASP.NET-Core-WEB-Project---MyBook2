@@ -68,6 +68,7 @@ namespace MyBook2
 
             else
             {
+                app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
