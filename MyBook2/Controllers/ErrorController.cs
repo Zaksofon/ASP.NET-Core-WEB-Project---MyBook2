@@ -12,14 +12,13 @@ namespace MyBook2.Controllers
             {
                 case 404:
                     ViewBag.ErrorMessage =
-                        "Sorry the resource you are trying to reach is no longer available!" + Environment.NewLine +
-                        "The Administrator has been worn and it will be solved soon!";
+                        "Sorry, the page you are trying to reach has not been found!";
                     break;
 
                 case 500:
                     ViewBag.ErrorMessage =
-                        "Sorry the resource you are trying to reach is no longer available!" +
-                        "The Administrator has been worn and it will be solved soon!";
+                        "Sorry, the page you are trying to reach has not been found!";
+
                     break;
             }
 
