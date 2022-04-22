@@ -1,6 +1,7 @@
 ﻿using MyBook2.Services.Books.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.AccessControl;
 
 namespace MyBook2.Models.Book
 {
@@ -22,6 +23,10 @@ namespace MyBook2.Models.Book
         [Url]
         [Display(Name = "Image Url")]
         public string ImageUrl { get; init; }
+
+
+        [Display(Name = "PDF File")]
+        public string FilePDF { get; init; }
 
         [Range(800, 2022)]
         [Display(Name = "Issue Year")]

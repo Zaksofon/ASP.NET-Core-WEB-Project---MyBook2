@@ -1,5 +1,6 @@
 ﻿
 @model IEnumerable<MyBook2.Services.Books.Models.BookServiceModel>
+@inject UserManager<User> UserManager
 
 @{
 	ViewBag.Title = "My Books";
@@ -21,13 +22,15 @@
 					<h5 class="card-title text-center">"@book.Title"</h5>
 					<h5 class="card-title text-center">@book.Author</h5>
 					<h5 class="card-title text-center">(@book.GenreName)</h5>
-					<a asp-controller="Books" 
-					   asp-action="Details" 
-					   asp-route-id="@book.Id" 
-					   asp-route-information="@book.GetInformation()" 
+					<a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id" asp-route-information="@book.GetInformation()" 
 					   class="btn btn-primary">Details</a>
 
-					@if (ViewBag.AllowBookEditing == true || User.UserIsAdmin())
+					   @if (User.Identity.IsAuthenticated && !User.UserIsAdmin() && @book.FilePDF != null)
+					   {
+						   <a class="btn btn-success" href="@book.FilePDF">Download </a>
+					   }
+
+					   @if (ViewBag.AllowBookEditing == true || User.UserIsAdmin())
 					{
 						<a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning">Edit</a>
 						<a asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>

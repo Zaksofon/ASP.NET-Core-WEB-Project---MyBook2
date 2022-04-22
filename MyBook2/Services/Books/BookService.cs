@@ -2,7 +2,6 @@
 using AutoMapper.QueryableExtensions;
 using MyBook2.Data;
 using MyBook2.Data.Models;
-using MyBook2.Models.Home;
 using MyBook2.Services.Books.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace MyBook2.Services.Books
             this.mapper = mapper;
         }
 
-        public int Create(string title, string author, string description, string imageUrl, int genreId, int issueYear, int librarianId)
+        public int Create(string title, string author, string description, string imageUrl, string filePDF, int genreId, int issueYear, int librarianId)
         {
             var bookLibrary = new Book
             {
@@ -28,6 +27,7 @@ namespace MyBook2.Services.Books
                 Author = author,
                 Description = description,
                 ImageUrl = imageUrl,
+                FilePDF = filePDF,
                 GenreId = genreId,
                 IssueYear = issueYear,
                 LibrarianId = librarianId,
@@ -40,7 +40,7 @@ namespace MyBook2.Services.Books
             return bookLibrary.Id;
         }
 
-        public bool Edit(int id, string title, string author, string description, string imageUrl, int genreId, int issueYear, bool isPublic)
+        public bool Edit(int id, string title, string author, string description, string imageUrl, string filePDF, int genreId, int issueYear, bool isPublic)
         {
             var bookLibrary = this.data.Books.Find(id);
 
@@ -53,6 +53,7 @@ namespace MyBook2.Services.Books
             bookLibrary.Author = author;
             bookLibrary.Description = description;
             bookLibrary.ImageUrl = imageUrl;
+            bookLibrary.FilePDF = filePDF;
             bookLibrary.GenreId = genreId;
             bookLibrary.IssueYear = issueYear;
             bookLibrary.IsPublic = isPublic;

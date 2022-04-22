@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using MyBook2.Services.Books.Models;
 
 namespace MyBook2.Data.Models
 {
@@ -24,6 +26,8 @@ namespace MyBook2.Data.Models
 
         [Required]
         public string ImageUrl { get; set; }
+
+        public string FilePDF { get; set; }
 
         public int IssueYear { get; set; }
 

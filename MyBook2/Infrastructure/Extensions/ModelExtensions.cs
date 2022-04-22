@@ -1,4 +1,5 @@
-﻿using MyBook2.Services.Books.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using MyBook2.Services.Books.Models;
 
 namespace MyBook2.Infrastructure.Extensions
 {
@@ -6,5 +7,6 @@ namespace MyBook2.Infrastructure.Extensions
     {
         public static string GetInformation(this IBookModel book)
             => book.Author + "-" + book.Title + "-" + book.IssueYear;
+
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyBook2.Infrastructure.Extensions;
@@ -95,7 +94,7 @@ namespace MyBook2.Controllers
                 return View(book);
             }
 
-            var bookId = books.Create(book.Title, book.Author, book.Description, book.ImageUrl, book.GenreId, book.IssueYear, librarianId);
+            var bookId = books.Create(book.Title, book.Author, book.Description, book.ImageUrl, book.FilePDF, book.GenreId, book.IssueYear, librarianId);
 
             TempData[GlobalMessageKey] = "Your book have been saved successfully! It will be Public as soon as Administrator approved it - that may take few minutes.";
 
@@ -161,8 +160,9 @@ namespace MyBook2.Controllers
                 book.Author, 
                 book.Description, 
                 book.ImageUrl, 
+                book.FilePDF,
                 book.GenreId, 
-                book.IssueYear, 
+                book.IssueYear,
                 User.UserIsAdmin());
 
             if (edited == false)

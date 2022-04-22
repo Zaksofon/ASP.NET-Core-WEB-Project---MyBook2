@@ -11,5 +11,6 @@
         public string ImageUrl { get; init; }
 
         public int IssueYear { get; init; }
+        public string FilePDF { get; init; }
     }
 }

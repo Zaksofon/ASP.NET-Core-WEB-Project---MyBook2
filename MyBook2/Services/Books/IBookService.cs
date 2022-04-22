@@ -21,7 +21,8 @@ namespace MyBook2.Services.Books
             string title, 
             string author, 
             string description, 
-            string imageUrl, 
+            string imageUrl,
+            string filePDF,
             int genreId, 
             int issueYear,
             int librarianId);
@@ -31,6 +32,7 @@ namespace MyBook2.Services.Books
             string author,
             string description,
             string imageUrl,
+            string filePDF,
             int genreId,
             int issueYear,
             bool isPublic);

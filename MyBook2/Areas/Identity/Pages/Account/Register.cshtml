@@ -10,7 +10,7 @@
 
 		<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
 			<div asp-validation-summary="All" class="text-danger"></div>
-			<div class="form-group">
+			<div class="form-group mt-4">
 				<label asp-for="Input.Email"></label>
 				<input asp-for="Input.Email" class="form-control"/>
 				<span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -19,6 +19,11 @@
 				<label asp-for="Input.FullName"></label>
 				<input asp-for="Input.FullName" class="form-control"/>
 				<span asp-validation-for="Input.FullName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Input.Avatar"></label>
+				<input asp-for="Input.Avatar" class="form-control"/>
+				<span asp-validation-for="Input.Avatar" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label asp-for="Input.Password"></label>

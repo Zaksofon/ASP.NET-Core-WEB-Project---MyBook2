@@ -37,6 +37,8 @@ namespace MyBook2.Areas.Identity.Pages.Account
             [StringLength(30)]
             public string FullName { get; set; }
 
+            public string Avatar { get; set; }
+
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
